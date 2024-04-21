@@ -1,0 +1,47 @@
+
+.gridContainer {
+    display: none;
+    width: 50%;
+    grid-template-rows: repeat(6, 80px); 
+    grid-template-columns: repeat(7, 13%);
+    border: 1px dashed #1E96FF;
+    gap: 5px;
+    border-radius: 45px;
+    border: solid #FFFFFF;
+    background-color: black;
+   }
+
+.griItem{
+    background-size: 100% 100%;
+}
+
+   .interact {
+    position: absolute;
+    top: 20%;
+    left: 65%;
+    width: 400px;
+    height: 300px;
+    background-color: rgb(255, 123, 0);
+    z-index: 1;
+    border-radius: 65px;
+    text-align: center;
+   }
+
+   #btnNewGame {
+    border-radius: 45px;
+    background-color: greenyellow;
+    width: 55%;
+    height: 100px;
+   }
+
+   #startGame {
+    border-radius: 45px;
+    background-color: greenyellow;
+    width: 55%;
+    height: 100px;
+   }
+
+body {
+    background-image: url("img/background.jpg.jpg");
+    background-size:cover;   
+}
