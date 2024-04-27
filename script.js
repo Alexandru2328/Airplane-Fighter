@@ -1,10 +1,10 @@
 let spaceShip;
-let positionShip = 46;
-let bulletsNr = 0;
+let shipPosition = 46;
+let bulletCount = 0;
 let bulletsList = [];
-let enemyNr = 0;
-let enemysList = [];
-const enemyPosition = [11, 21, 31, 41, 51, 61, 71];
+let enemyCount = 0;
+let enemiesList = [];
+const enemyPositions = [11, 21, 31, 41, 51, 61, 71];
 let gameStatus = 0;
 let score = 0;
 
@@ -12,9 +12,9 @@ function newGame() {
     window.location.reload();
 }
 
-function message() {
-    let message = document.getElementById("message");
-    message.innerHTML = "GAME OVER !!<br>" + "SCORE " + score;
+function showMessage() {
+    let messageElement = document.getElementById("message");
+    messageElement.innerHTML = "GAME OVER !!<br>" + "SCORE " + score;
     let button = document.getElementById("startGame");
     button.textContent = "NEW GAME";
     button.setAttribute('onclick',
@@ -22,16 +22,16 @@ function message() {
 }
 
 function collision() {
-    let message = document.getElementById("message");
+    let messageElement = document.getElementById("message");
     for (let i = 0; i < bulletsList.length && gameStatus; i++) {
-        for (let j = 0; j < enemysList.length && gameStatus; j++) {
-            if (bulletsList[i].position === enemysList[j].position) {
+        for (let j = 0; j < enemiesList.length && gameStatus; j++) {
+            if (bulletsList[i].position === enemiesList[j].position) {
                 let field = document.getElementById(bulletsList[i].position);
                 bulletsList.splice(i, 1);
-                enemysList.splice(j, 1);
+                enemiesList.splice(j, 1);
                 field.style.backgroundImage = "none"; 
                 ++score;
-                message.innerHTML = "SCORE " + score;
+                messageElement.innerHTML = "SCORE " + score;
                 break;
             }
         }
@@ -41,7 +41,7 @@ function collision() {
 function enemyEffect(field, index) {
     let position = document.getElementById(field);
     if (field % 10 === 6) {
-        enemysList.splice(index, 1);
+        enemiesList.splice(index, 1);
         position.style.backgroundImage = "none";
     } else {
         position.style.backgroundImage = "none";
@@ -49,64 +49,64 @@ function enemyEffect(field, index) {
         position = document.getElementById(field);
         position.style.backgroundImage = 'url("img/enemy.png")';
     }
-    if (field == positionShip) {
+    if (field == shipPosition) {
         gameStatus = 0;
-        message();
+        showMessage();
     }
 }
 
 function spawnEnemy() {
     if (gameStatus) {
-        let position = enemyPosition[Math.floor(Math.random() * enemyPosition.length)];
-        ++enemyNr;
+        let position = enemyPositions[Math.floor(Math.random() * enemyPositions.length)];
+        ++enemyCount;
         let enemy = document.getElementById(position);
         enemy.style.backgroundImage = 'url("img/enemy.png")';
-        enemysList.push({ key: enemyNr, position: position });
+        enemiesList.push({ key: enemyCount, position: position });
     }
 } 
 
-function bulletEffect(positionBullet, index) {
-    let position = document.getElementById(positionBullet);
-    if (positionBullet % 10 === 1) {
+function bulletEffect(bulletPosition, index) {
+    let position = document.getElementById(bulletPosition);
+    if (bulletPosition % 10 === 1) {
         bulletsList.splice(index, 1);
         position.style.backgroundImage = "none";
     } else {
         position.style.backgroundImage = "none";
-        --positionBullet;
-        position = document.getElementById(positionBullet);
+        --bulletPosition;
+        position = document.getElementById(bulletPosition);
         position.style.backgroundImage = 'url("img/bullet.png")';
     }
 }
 
 function spawnShot(e) {
     if (e.code === "Space" && gameStatus) {
-        ++bulletsNr;
-        let positionBullet = positionShip - 1;
-        let shootElement = document.getElementById(positionBullet);
+        ++bulletCount;
+        let bulletPosition = shipPosition - 1;
+        let shootElement = document.getElementById(bulletPosition);
         shootElement.style.backgroundImage = 'url("img/bullet.png")';  
-        bulletsList.push({ key: bulletsNr, position: positionBullet });
+        bulletsList.push({ key: bulletCount, position: bulletPosition });
     }
 }
 
 function shipControl(e) {
-    if (e.code === "ArrowLeft" && positionShip > 16 && gameStatus) {
+    if (e.code === "ArrowLeft" && shipPosition > 16 && gameStatus) {
         spaceShip.style.backgroundImage = "none";
-        positionShip -= 10;
-        spaceShip = document.getElementById(positionShip);
+        shipPosition -= 10;
+        spaceShip = document.getElementById(shipPosition);
         spaceShip.style.backgroundImage = `url("img/Spaceship.jpg")`;
-    } else if (e.code === "ArrowRight" && positionShip < 76 && gameStatus) {
+    } else if (e.code === "ArrowRight" && shipPosition < 76 && gameStatus) {
         spaceShip.style.backgroundImage = "none";
-        positionShip += 10;
-        spaceShip = document.getElementById(positionShip);
+        shipPosition += 10;
+        spaceShip = document.getElementById(shipPosition);
         spaceShip.style.backgroundImage = `url("img/Spaceship.jpg")`;
     }
 }
 
-function enemysStatus() {
+function enemiesStatus() {
     if (gameStatus) {
-        enemysList.forEach((obiect, index) => {
-            enemyEffect(obiect.position, index);
-            ++obiect.position;
+        enemiesList.forEach((object, index) => {
+            enemyEffect(object.position, index);
+            ++object.position;
             collision();
         });
     }
@@ -114,15 +114,15 @@ function enemysStatus() {
 
 function bulletsStatus() {
     if (gameStatus) {
-        bulletsList.forEach((obiect, index) => {
-            bulletEffect(obiect.position, index);
-            --obiect.position;
+        bulletsList.forEach((object, index) => {
+            bulletEffect(object.position, index);
+            --object.position;
             collision();
         });
     }
 }
 
-function rezumeGame() {
+function resumeGame() {
     gameStatus = 1;
     let button = document.getElementById("startGame");
     button.textContent = "PAUSE";
@@ -133,34 +133,34 @@ function rezumeGame() {
 function pauseGame() {
     gameStatus = 0;
     let button = document.getElementById("startGame");
-    button.textContent = "REZUME";
+    button.textContent = "RESUME";
     button.setAttribute('onclick',
-        `rezumeGame()`);
+        `resumeGame()`);
 }
 
 function startGame() {
     let gridContainer = document.getElementById("container");
     gameStatus = 1;
-    let btnStart = document.getElementById("startGame");
-    btnStart.textContent = "PAUSE";
-    btnStart.setAttribute('onclick',
+    let startButton = document.getElementById("startGame");
+    startButton.textContent = "PAUSE";
+    startButton.setAttribute('onclick',
         `pauseGame()`);
     gridContainer.style.display = "grid";
-    let message = document.getElementById("message");
-    message.innerHTML = "SCORE 0"
+    let messageElement = document.getElementById("message");
+    messageElement.innerHTML = "SCORE 0"
     for (let i = 1; i <= 6; ++i) {
         for (let j = 1; j <= 7; j++) {
             let newField = document.createElement("div");
-            newField.className = "griItem";
+            newField.className = "gridItem";
             newField.id = j * 10 + i;
             gridContainer.appendChild(newField);
         }
     }
-    spaceShip = document.getElementById(positionShip);
+    spaceShip = document.getElementById(shipPosition);
     spaceShip.style.backgroundImage = `url("img/Spaceship.jpg")`;
 }
 
-setInterval(enemysStatus, 350);
+setInterval(enemiesStatus, 350);
 setInterval(bulletsStatus, 100);
 setInterval(spawnEnemy, 1400);
 setInterval(collision, 6);
